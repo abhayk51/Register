@@ -18,6 +18,7 @@ const Register = () => {
 
   const createUser = async (val) => {
     await addDoc(usersCollectionRef, val)
+    await alert("User Created")
   };
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
