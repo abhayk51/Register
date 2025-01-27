@@ -29,7 +29,7 @@ const Register = () => {
   const createUser = async (val) => {
     await addDoc(usersCollectionRef, val)
     await alert("User Created")
-    await navigate('/login');
+    await navigate('/');
   };
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
