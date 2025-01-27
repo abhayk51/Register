@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { signUpSchema } from '../Schemas';
 import { db } from '../firebase-config';
-import {addDoc, collection} from 'firebase/firestore';
+import {addDoc, collection, getDocs} from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 
 
 const initialValues = {
@@ -13,19 +14,29 @@ const initialValues = {
 }
 
 const Register = () => {
+  const [users, setUsers] = useState()
+  const navigate = useNavigate();
 
   const usersCollectionRef = collection(db, "register")
+
+  const getUsers = async(values) => {
+    const data = await getDocs(usersCollectionRef)
+    setUsers(data.docs.map((doc)=>({...doc.data()})))
+    const el = users.filter((user) => {return user.phone === values.phone || user.email === values.email})
+    el.length ? alert("User already exist") : createUser(values)
+  }
 
   const createUser = async (val) => {
     await addDoc(usersCollectionRef, val)
     await alert("User Created")
+    await navigate('/login');
   };
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
     initialValues: initialValues,
     validationSchema: signUpSchema,
     onSubmit: (values, errors)=>{
-      createUser(values);
+      getUsers(values);
       console.log("Values - ",values, "Errors - ", errors) ;
     }
   });

@@ -1,10 +1,23 @@
 import LoginForm from './Components/LoginForm.jsx'
+import Dashboard from './Components/Dashboard.jsx'
+import { createBrowserRouter, RouterProvider} from 'react-router-dom'
 import './App.css'
 
+
 function App() {
+  const router = createBrowserRouter([
+    {
+      path: "/login",
+      element: <LoginForm/>
+    },
+    {
+      path: "/dashboard",
+      element: <Dashboard/>
+    },
+  ])
   return (
     <div className='container-fluid py-4'>
-    <LoginForm/>
+    <RouterProvider router={router}/>
     </div>
   )
 }

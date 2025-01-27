@@ -1,5 +1,6 @@
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { loginSchema } from '../Schemas';
 import { db } from '../firebase-config';
 import { collection, getDocs } from 'firebase/firestore';
@@ -13,12 +14,20 @@ const initialValues = {
 const Login = () => {
   const [users, setUsers] = useState('');
   const usersCollectionRef = collection(db, "register")
+  const [list, setList] = useState('');
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    localStorage.setItem('List', JSON.stringify(list))
+  }, [list])
 
   const getUsers = async(values) => {
     const data = await getDocs(usersCollectionRef);
     setUsers(data.docs.map((doc)=>({...doc.data()})))
     const el = users.filter((user) => {return user.email === values.email && user.pass === values.pass})
-    el.length ? alert("Valid user") : alert("User not found") ;
+    el.length ? setList(el) : null
+
+    el.length ? navigate("/dashboard") : alert("User not found") ;
   }
 
   const {values, errors, touched, handleBlur, handleChange, handleSubmit} = useFormik({
