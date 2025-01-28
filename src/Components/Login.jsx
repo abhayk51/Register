@@ -23,7 +23,7 @@ const Login = () => {
 
   const getUsers = async(values) => {
     const data = await getDocs(usersCollectionRef);
-    setUsers(data.docs.map((doc)=>({...doc.data()})))
+    setUsers(data.docs.map((doc)=>({...doc.data()})));
     const el = users.filter((user) => {return user.email === values.email && user.pass === values.pass})
     el.length ? setList(el) : null
 
